@@ -1,15 +1,22 @@
-FROM node:16 AS build-stage
+FROM node:16 AS base
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
+FROM base as test
 RUN npm ci
+COPY . .
+ENV CI=true
+RUN npm run test
 
-RUN npm run build
+FROM base as prod
+RUN npm ci --production
+COPY . .
+ENV REACT_APP_BACKEND_URL=http://localhost:3000
+CMD [ "npm", "run", "build" ]
 
 FROM nginx:1.20-alpine
 
-ENV REACT_APP_BACKEND_URL = "http://localhost:3000"
-
-COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+COPY --from=prod /usr/src/app/build /usr/share/nginx/html

@@ -1,0 +1,15 @@
+.Todo {
+  border-top: 1px solid #000;
+}
+
+.Todo-inner {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 12px auto;
+  max-width: 70%;
+}
+
+.Todo-button-wrapper {
+  display: flex;
+}
