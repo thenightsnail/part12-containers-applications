@@ -29,6 +29,9 @@ services:
         dockerfile: dev.Dockerfile
       ports:
         - 3030:3030
+      depends_on:
+        - mongo
+        - redis
       environment:
         - REDIS_URL=redis://redis:6379
         - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
@@ -45,7 +48,7 @@ services:
         MONGO_INITDB_ROOT_PASSWORD: example
         MONGO_INITDB_DATABASE: the_database
       volumes:
-        - ./todo-backend:/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+        - ./todo-backend:/./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
         - ./todo-backend:/mongo_data:/data/db
     
     redis:
