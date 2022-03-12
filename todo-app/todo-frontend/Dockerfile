@@ -12,11 +12,11 @@ ENV CI=true
 RUN npm run test
 
 FROM base as prod
+ARG REACT_APP_BACKEND_URL
 RUN npm ci --production
 COPY . .
-ENV REACT_APP_BACKEND_URL=http://localhost:3000
-CMD [ "npm", "run", "build" ]
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+RUN npm run build
 
-FROM nginx:1.20-alpine
-
+FROM nginx:1.20-alpine as deploy
 COPY --from=prod /usr/src/app/build /usr/share/nginx/html
