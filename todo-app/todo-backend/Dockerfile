@@ -10,4 +10,5 @@ RUN npm ci
 
 ENV DEBUG=playground:*
 
-CMD npm start
+CMD npm run start
+
